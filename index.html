@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Padel Dashboard – Nächste Spiele</title>
+  <title>Padel Dashboard</title>
   <style>
     :root{
       --bg:#f6f2e9;
@@ -13,7 +13,6 @@
       --line:rgba(0,0,0,.10);
 
       --padelGreen:#1f8a5b;
-      --padelGreen2:#2fbf71;
       --clay:#e9a56a;
       --ball:#d8ff3f;
       --ballShadow: rgba(0,0,0,.15);
@@ -33,10 +32,10 @@
     }
     .wrap{max-width:1100px;margin:0 auto}
     .header{
-      display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap;
+      display:flex;align-items:center;gap:12px;
       margin-bottom:14px;
     }
-    .brand{display:flex;align-items:center;gap:12px;}
+    /* ORIGINAL tennisball logo (wie zuvor) */
     .logoBall{
       width:44px;height:44px;border-radius:999px;
       background: radial-gradient(circle at 30% 28%, #fff, var(--ball) 45%, #b6e400 80%);
@@ -76,6 +75,7 @@
         linear-gradient(180deg, rgba(47,191,113,.12), rgba(233,165,106,.08)),
         #fff;
       overflow:hidden;
+      margin-bottom:14px;
     }
     .courtLines{
       position:absolute;inset:-40px;
@@ -91,13 +91,12 @@
                               rgba(31,138,91,.35) 80% 80.4%, transparent 80.4% 100%);
       transform: rotate(-6deg);
     }
-    .liveTop{
-      display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;
-      position:relative;
-    }
+    .liveTop{position:relative}
     .liveTitle{
       display:flex;align-items:center;gap:10px;
-      font-weight:950;font-size:18px;margin:0;
+      font-weight:950;
+      font-size:17px; /* leicht kleiner */
+      margin:0;
     }
     .miniBall{
       width:18px;height:18px;border-radius:999px;
@@ -115,6 +114,12 @@
       clip-path: polygon(0 56%, 100% 56%, 100% 100%, 0 100%);
       transform: rotate(-18deg);
     }
+    .liveHint{
+      margin-top:6px;
+      color:var(--muted);
+      font-size:12px;
+      position:relative;
+    }
 
     .grid{
       display:grid;
@@ -131,23 +136,27 @@
       border-radius:16px;
       padding:12px 12px;
     }
-    .k{color:var(--muted);font-size:12px;margin-bottom:6px}
-    .v{font-size:16px;font-weight:950;letter-spacing:.2px}
-    .big{font-size:26px}
+    .k{color:var(--muted);font-size:11px;margin-bottom:6px}
+    .v{font-size:18px;font-weight:950;letter-spacing:.2px}   /* leicht kleiner */
+    .big{font-size:20px}                                     /* leicht kleiner */
 
     .code{
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       font-weight:950;
       letter-spacing:.8px;
-      font-size:24px;
+      font-size:20px; /* leicht kleiner */
     }
 
-    /* Table */
+    /* TABLE */
     .tableHead{
-      padding:14px 16px 10px 16px;
+      padding:14px 16px 6px 16px;
       display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap;
     }
     .tableTitle{font-weight:950;font-size:16px}
+    .tableSub{
+      padding:0 16px 10px 16px;
+      font-size:12px;color:var(--muted);
+    }
     table{
       width:100%;
       border-collapse:separate;
@@ -171,6 +180,7 @@
       font-size:13px;
     }
     tbody tr:hover{background: rgba(47,191,113,.06)}
+    /* Highlight bleibt (wie von dir gewünscht) */
     tbody tr.highlight{
       background: rgba(216,255,63,.25);
       outline:2px solid rgba(31,138,91,.35);
@@ -195,12 +205,8 @@
 <div class="wrap">
 
   <div class="header">
-    <div class="brand">
-      <div class="logoBall" aria-hidden="true"></div>
-      <div>
-        <h1>Padel Dashboard</h1>
-      </div>
-    </div>
+    <div class="logoBall" aria-hidden="true"></div>
+    <h1>Padel Dashboard</h1>
   </div>
 
   <!-- LIVE -->
@@ -208,7 +214,8 @@
     <div class="courtLines" aria-hidden="true"></div>
 
     <div class="liveTop">
-      <div class="liveTitle"><span class="miniBall" aria-hidden="true"></span> Nächstes / aktuelles Spiel</div>
+      <div class="liveTitle"> Nächstes Spiel</div>
+      <div class="liveHint">Wechselt nach 21:00 am Spieltag automatisch zum nächsten Datum.</div>
     </div>
 
     <div class="grid">
@@ -234,10 +241,11 @@
   </div>
 
   <!-- TABLE -->
-  <div class="card" style="margin-top:14px;">
+  <div class="card">
     <div class="tableHead">
-      <div class="tableTitle">Nächste Spiele</div>
+      <div class="tableTitle">Bevorstehende Spiele</div>
     </div>
+    <div class="tableSub">Vergangene Spiele werden automatisch ausgeblendet.</div>
 
     <div class="scroll">
       <table>
@@ -266,7 +274,6 @@
     { city:"Milandia", court:"Court 3", start:"2026-02-05T19:00:00", code:"" },
     { city:"Milandia", court:"Court 3", start:"2026-02-19T19:00:00", code:"" },
     { city:"Milandia", court:"Court 3", start:"2026-03-05T19:00:00", code:"" },
-
     { city:"Milandia", court:"Court 3", start:"2026-03-19T19:00:00", code:"" },
     { city:"Milandia", court:"Court 3", start:"2026-04-02T19:00:00", code:"" },
     { city:"Milandia", court:"Court 3", start:"2026-04-16T19:00:00", code:"" },
@@ -287,7 +294,6 @@
     { city:"Bülach", court:"Court 1", start:"2026-03-12T19:00:00", code:"8143#" },
     { city:"Bülach", court:"Court 1", start:"2026-03-26T19:00:00", code:"8126#" },
     { city:"Bülach", court:"Court 1", start:"2026-04-09T19:00:00", code:"5726#" },
-
     { city:"Bülach", court:"Court 1", start:"2026-04-23T19:00:00", code:"4125#" },
     { city:"Bülach", court:"Court 1", start:"2026-05-07T19:00:00", code:"9478#" },
     { city:"Bülach", court:"Court 1", start:"2026-05-21T19:00:00", code:"5758#" },
@@ -310,6 +316,7 @@
   function formatCHDateTime(d){
     return `${pad2(d.getDate())}.${pad2(d.getMonth()+1)}.${d.getFullYear()} ${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
   }
+
   function countdownString(ms){
     const s = Math.max(0, Math.floor(ms/1000));
     const days = Math.floor(s / 86400);
@@ -322,7 +329,9 @@
     if (mins > 0) return `${mins}m ${secs}s`;
     return `${secs}s`;
   }
+
   function displayUntil(startDate){
+    // am Spieltag bis 21:00 aktiv
     const d = new Date(startDate.getTime());
     d.setHours(21,0,0,0);
     return d;
@@ -341,6 +350,7 @@
   const tbody = document.getElementById("tbody");
 
   function findActive(now){
+    // Erstes Spiel, das noch nicht bis 21:00 "abgelaufen" ist
     for (const g of sorted){
       if (now < displayUntil(g.startDate)) return g;
     }
@@ -369,7 +379,9 @@
         <td><span class="chip ${chipClass}">${g.city}</span></td>
         <td class="nowrap">${g.court}</td>
         <td class="nowrap">${formatCHDateTime(g.startDate)}</td>
-        <td class="nowrap">${g.city === "Bülach" ? (g.code ? `<span class="code" style="font-size:14px">${g.code}</span>` : `<span class="muted">TBD</span>`) : `<span class="muted">—</span>`}</td>
+        <td class="nowrap">${g.city === "Bülach"
+            ? (g.code ? `<span class="code" style="font-size:14px">${g.code}</span>` : `<span class="muted">TBD</span>`)
+            : `<span class="muted">—</span>`}</td>
       `;
       tbody.appendChild(tr);
     }
@@ -396,11 +408,7 @@
     liveWhere.textContent = `${g.city} · ${g.court}`;
     liveWhen.textContent = formatCHDateTime(start);
 
-    if (g.city === "Bülach"){
-      liveCode.textContent = g.code ? g.code : "TBD";
-    } else {
-      liveCode.textContent = "—";
-    }
+    liveCode.textContent = (g.city === "Bülach") ? (g.code || "TBD") : "—";
 
     if (isBefore){
       countdownLabel.textContent = "Start in";
