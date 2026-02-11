@@ -4,12 +4,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Padel Dashboard</title>
+
   <style>
     :root{
       --bg:#f6f2e9;
       --card:#ffffff;
       --ink:#1a1a1a;
-      --muted:#5f6a5f;f
+      --muted:#5f6a5f;
       --line:rgba(0,0,0,.10);
 
       --padelGreen:#1f8a5b;
@@ -19,7 +20,9 @@
 
       --radius:18px;
     }
+
     *{box-sizing:border-box}
+
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
@@ -30,32 +33,39 @@
         linear-gradient(180deg, #faf7f1, var(--bg));
       padding:22px;
     }
-    .wrap{max-width:1100px;margin:0 auto}
+
+    /* ---------- Flying balls layer (Vordergrund) ---------- */
+    #ballLayer{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:50;         /* VORDERGRUND */
+      overflow:hidden;
+    }
+
+    .wrap{max-width:1100px;margin:0 auto; position:relative; z-index:2;}
+
     .header{
       display:flex;align-items:center;gap:12px;
       margin-bottom:14px;
     }
-    /* Tennisball Logo */
-.logoBall{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:30px;
-}
 
-    }
-    .logoBall:before,.logoBall:after{
-      content:"";
-      position:absolute;inset:6px;
+    /* Logo (emoji) */
+    .logoBall{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:44px;
+      height:44px;
       border-radius:999px;
-      border:2px solid rgba(0,0,0,.14);
-      clip-path: polygon(0 0, 100% 0, 100% 42%, 0 42%);
-      transform: rotate(-18deg);
+      font-size:30px;
+      background: radial-gradient(circle at 30% 28%, #fff, rgba(216,255,63,.95) 55%, rgba(182,228,0,.85) 95%);
+      border:1px solid rgba(0,0,0,.08);
+      box-shadow: 0 10px 18px var(--ballShadow);
+      user-select:none;
+      flex:0 0 auto;
     }
-    .logoBall:after{
-      clip-path: polygon(0 58%, 100% 58%, 100% 100%, 0 100%);
-      transform: rotate(-18deg);
-    }
+
     h1{margin:0;font-size:22px;letter-spacing:.2px}
 
     .card{
@@ -240,18 +250,15 @@
       body{padding:16px}
       h1{font-size:20px}
 
-      .v{font-size:19px}
-      .big{font-size:21px}
+      .v{font-size:18px}     /* Luca: .v = 18 */
+      .big{font-size:20px}   /* Luca: .big = 20 */
       .code{font-size:20px}
 
       .scroll{max-height:none; overflow:visible;}
       table, thead, tbody, th, td, tr{display:block;}
       thead{display:none;}
       table{border-top:none;}
-      tbody td{
-        border:none;
-        padding:0;
-      }
+      tbody td{border:none; padding:0;}
 
       tbody tr{
         margin:10px 12px 12px 12px;
@@ -291,75 +298,111 @@
 
       .chip{font-size:11px;padding:5px 9px}
     }
+
+    /* ---------- Flying balls visuals ---------- */
+    .flyBall{
+      position:absolute;
+      width:34px;
+      height:34px;
+      border-radius:999px;
+      background: radial-gradient(circle at 30% 28%, #fff, var(--ball) 45%, #b6e400 80%);
+      box-shadow: 0 10px 18px rgba(0,0,0,.12);
+      border: 1px solid rgba(0,0,0,.06);
+      will-change: transform;
+      opacity:.92;
+      transform: translate3d(0,0,0);
+      filter: saturate(1.03);
+    }
+    .flyBall:before,.flyBall:after{
+      content:"";
+      position:absolute;inset:5px;
+      border-radius:999px;
+      border:2px solid rgba(0,0,0,.14);
+      clip-path: polygon(0 0, 100% 0, 100% 42%, 0 42%);
+      transform: rotate(-18deg);
+      opacity:.9;
+    }
+    .flyBall:after{
+      clip-path: polygon(0 58%, 100% 58%, 100% 100%, 0 100%);
+      transform: rotate(-18deg);
+    }
+    @media (max-width:520px){
+      .flyBall{ width:28px; height:28px; }
+    }
+    @media (prefers-reduced-motion: reduce){
+      #ballLayer{ display:none; }
+    }
   </style>
 </head>
 
 <body>
-<div class="wrap">
+  <!-- Flying balls (Vordergrund) -->
+  <div id="ballLayer" aria-hidden="true"></div>
 
-  <div class="header">
-    <div class="logoBall">🎾</div>
-    <h1>Padel Dashboard</h1>
-  </div>
+  <div class="wrap">
 
-  <!-- LIVE -->
-  <div class="card live">
-    <div class="courtLines" aria-hidden="true"></div>
-
-    <div class="liveTop">
-      <div class="liveTitle">Nächstes Spiel</div>
-      <div class="liveHint">Wechselt nach 21:00 Uhr am Spieltag.</div>
+    <div class="header">
+      <div class="logoBall">🎾</div>
+      <h1>Padel Dashboard</h1>
     </div>
 
-    <div class="grid">
-      <div class="tile">
-        <div class="k">Ort & Court</div>
-        <div class="v big" id="liveWhere">—</div>
+    <!-- LIVE -->
+    <div class="card live">
+      <div class="courtLines" aria-hidden="true"></div>
+
+      <div class="liveTop">
+        <div class="liveTitle">Nächstes Spiel</div>
+        <div class="liveHint">Wechselt nach 21:00 Uhr am Spieltag.</div>
       </div>
 
-      <div class="tile">
-        <!-- Floating Smiley sits here -->
-        <div class="floatSmiley" aria-hidden="true">😄</div>
+      <div class="grid">
+        <div class="tile">
+          <div class="k">Ort & Court</div>
+          <div class="v big" id="liveWhere">—</div>
+        </div>
 
-        <div class="k">Datum & Zeit</div>
-        <div class="v big" id="liveWhen">—</div>
+        <div class="tile">
+          <div class="floatSmiley" aria-hidden="true">😄</div>
 
-        <div style="margin-top:10px">
-          <div class="k" id="countdownLabel">Start in</div>
-          <div class="v big" id="liveCountdown">—</div>
+          <div class="k">Datum & Zeit</div>
+          <div class="v big" id="liveWhen">—</div>
+
+          <div style="margin-top:10px">
+            <div class="k" id="countdownLabel">Start in</div>
+            <div class="v big" id="liveCountdown">—</div>
+          </div>
+        </div>
+
+        <div class="tile" style="grid-column:1 / -1">
+          <div class="k">Zugangscode (nur Bülach)</div>
+          <div class="code" id="liveCode">—</div>
         </div>
       </div>
+    </div>
 
-      <div class="tile" style="grid-column:1 / -1">
-        <div class="k">Zugangscode (nur Bülach)</div>
-        <div class="code" id="liveCode">—</div>
+    <!-- LIST -->
+    <div class="card">
+      <div class="tableHead">
+        <div class="tableTitle">Bevorstehende Spiele</div>
+      </div>
+      <div class="tableSub">Vergangene Spiele werden ausgeblendet.</div>
+
+      <div class="scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Ort</th>
+              <th>Court</th>
+              <th>Datum</th>
+              <th>Zugangscode</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
       </div>
     </div>
+
   </div>
-
-  <!-- LIST -->
-  <div class="card">
-    <div class="tableHead">
-      <div class="tableTitle">Bevorstehende Spiele</div>
-    </div>
-    <div class="tableSub">Vergangene Spiele werden ausgeblendet.</div>
-
-    <div class="scroll">
-      <table>
-        <thead>
-          <tr>
-            <th>Ort</th>
-            <th>Court</th>
-            <th>Datum</th>
-            <th>Zugangscode</th>
-          </tr>
-        </thead>
-        <tbody id="tbody"></tbody>
-      </table>
-    </div>
-  </div>
-
-</div>
 
 <script>
   // Daten: ISO lokal (ohne Z)
@@ -406,6 +449,7 @@
     { city:"Bülach", court:"Court 1", start:"2026-10-08T19:00:00", code:"3112#" },
   ];
 
+  // Helpers
   const pad2 = n => String(n).padStart(2,"0");
   const parseLocal = iso => new Date(iso);
 
@@ -436,6 +480,7 @@
     .map(g => ({...g, startDate: parseLocal(g.start)}))
     .sort((a,b) => a.startDate - b.startDate);
 
+  // DOM
   const liveWhere = document.getElementById("liveWhere");
   const liveWhen = document.getElementById("liveWhen");
   const liveCountdown = document.getElementById("liveCountdown");
@@ -485,6 +530,7 @@
               : `<span class="muted">—</span>`}</td>
         `;
       } else {
+        // Mobile Cards
         tr.innerHTML = `
           <td>
             <div class="mRow">
@@ -544,6 +590,139 @@
   tick();
   setInterval(tick, 1000);
   window.addEventListener("resize", () => tick());
+
+  /* ---------- Playful flying balls (weniger Bälle, Bounce in Viewport-Mitte) ---------- */
+  (function initFlyingBalls(){
+    const layer = document.getElementById("ballLayer");
+    if (!layer) return;
+
+    const prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReduced) return;
+
+    const balls = [];
+    const MAX_BALLS = 2;          // ✅ halb so viele (vorher 5)
+    const SPAWN_EVERY_MS = 2400;  // ✅ ruhigerer Spawn
+    const GRAVITY = 0.22;
+    const RESTITUTION = 0.82;
+    const FRICTION = 0.995;
+    const EXIT_AFTER_MS = 5200;
+
+    function rand(min, max){ return Math.random() * (max - min) + min; }
+
+    function spawnBall(){
+      if (balls.length >= MAX_BALLS) return;
+
+      const el = document.createElement("div");
+      el.className = "flyBall";
+      layer.appendChild(el);
+
+      const rect = el.getBoundingClientRect();
+      const r = rect.width / 2;
+
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+
+      // pro Ball eigene Bounce-Linie irgendwo in der Mitte des Viewports
+      const bounceLine = rand(h * 0.50, h * 0.72);
+
+      // Spawn from top/right/left/top-right
+      const edge = Math.floor(rand(0, 4));
+      let x, y, vx, vy;
+
+      if (edge === 0){
+        x = rand(r, w - r);
+        y = -r * 2;
+        vx = rand(-2.2, 2.2);
+        vy = rand(1.6, 3.2);
+      } else if (edge === 1){
+        x = w + r * 2;
+        y = rand(r, h * 0.55);
+        vx = rand(-3.8, -2.0);
+        vy = rand(0.2, 2.2);
+      } else if (edge === 2){
+        x = -r * 2;
+        y = rand(r, h * 0.55);
+        vx = rand(2.0, 3.8);
+        vy = rand(0.2, 2.2);
+      } else {
+        x = w + r * 2;
+        y = -r * 2;
+        vx = rand(-4.2, -2.3);
+        vy = rand(1.5, 3.2);
+      }
+
+      const born = performance.now();
+      balls.push({ el, x, y, vx, vy, r, born, exiting:false, bounceLine });
+      el.style.transform = `translate3d(${x - r}px, ${y - r}px, 0)`;
+    }
+
+    function step(){
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const now = performance.now();
+
+      for (let i = balls.length - 1; i >= 0; i--){
+        const b = balls[i];
+
+        // nach einiger Zeit wieder wegfliegen lassen
+        if (!b.exiting && (now - b.born) > EXIT_AFTER_MS){
+          b.exiting = true;
+          b.vx += rand(-1.0, 1.0);
+          b.vy -= rand(1.2, 2.8);
+        }
+
+        // physics
+        b.vy += GRAVITY;
+        b.vx *= FRICTION;
+        b.vy *= FRICTION;
+
+        b.x += b.vx;
+        b.y += b.vy;
+
+        // Bounce an der (pro Ball) Mid-Viewport-Linie
+        const bounceY = b.bounceLine ?? (h * 0.62);
+        if (!b.exiting && b.y + b.r > bounceY){
+          b.y = bounceY - b.r;
+          b.vy = -Math.abs(b.vy) * RESTITUTION;
+          b.vx *= 0.985;
+        }
+
+        // etwas im Screen halten (links/rechts/top), solange nicht exiting
+        if (!b.exiting && b.y - b.r < 0){
+          b.y = b.r;
+          b.vy = Math.abs(b.vy) * RESTITUTION;
+        }
+        if (!b.exiting && b.x - b.r < 0){
+          b.x = b.r;
+          b.vx = Math.abs(b.vx) * RESTITUTION;
+        }
+        if (!b.exiting && b.x + b.r > w){
+          b.x = w - b.r;
+          b.vx = -Math.abs(b.vx) * RESTITUTION;
+        }
+
+        // render
+        b.el.style.transform = `translate3d(${b.x - b.r}px, ${b.y - b.r}px, 0)`;
+
+        // entfernen sobald weit weg (nur während exiting)
+        const off =
+          (b.x + b.r < -140) || (b.x - b.r > w + 140) ||
+          (b.y + b.r < -220) || (b.y - b.r > h + 260);
+
+        if (b.exiting && off){
+          b.el.remove();
+          balls.splice(i, 1);
+        }
+      }
+
+      requestAnimationFrame(step);
+    }
+
+    spawnBall();
+    setTimeout(spawnBall, 550);
+    setInterval(spawnBall, SPAWN_EVERY_MS);
+    requestAnimationFrame(step);
+  })();
 </script>
 
 </body>
