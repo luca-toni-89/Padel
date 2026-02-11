@@ -122,6 +122,7 @@
       background: rgba(255,255,255,.75);
       border-radius:16px;
       padding:12px 12px;
+      position:relative;
     }
     .k{color:var(--muted);font-size:11px;margin-bottom:6px}
     .v{font-size:18px;font-weight:950;letter-spacing:.2px}
@@ -132,6 +133,49 @@
       font-weight:950;
       letter-spacing:.8px;
       font-size:22px;
+    }
+
+    /* -------- Floating Smiley -------- */
+    .floatSmiley{
+      position:absolute;
+      right:14px;
+      top:14px;
+      width:46px;
+      height:46px;
+      border-radius:999px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:22px;
+      background: radial-gradient(circle at 30% 28%, #fff, rgba(216,255,63,.95) 55%, rgba(182,228,0,.85) 95%);
+      border:1px solid rgba(0,0,0,.08);
+      box-shadow: 0 10px 22px rgba(0,0,0,.12);
+      animation: floaty 3.2s ease-in-out infinite;
+      user-select:none;
+      pointer-events:none;
+      transform: translateZ(0);
+    }
+    .floatSmiley:after{
+      content:"";
+      position:absolute;
+      inset:-10px;
+      border-radius:999px;
+      background: radial-gradient(circle, rgba(31,138,91,.18), transparent 60%);
+      filter: blur(2px);
+      opacity:.55;
+      z-index:-1;
+    }
+    @keyframes floaty{
+      0%,100%{ transform: translateY(0px); }
+      50%{ transform: translateY(-6px); }
+    }
+
+    @media (max-width:700px){
+      .floatSmiley{
+        width:100px;height:100px;
+        font-size:70px;
+        right:12px; top:12px;
+      }
     }
 
     /* TABLE / LIST */
@@ -200,16 +244,15 @@
       .big{font-size:21px}
       .code{font-size:20px}
 
-      .scroll{max-height:none; overflow:visible;} /* volle Seite, normal nach unten scroll */
+      .scroll{max-height:none; overflow:visible;}
       table, thead, tbody, th, td, tr{display:block;}
-      thead{display:none;} /* header weg */
+      thead{display:none;}
       table{border-top:none;}
       tbody td{
         border:none;
         padding:0;
       }
 
-      /* Jede Zeile als Card */
       tbody tr{
         margin:10px 12px 12px 12px;
         border:1px solid rgba(0,0,0,.10);
@@ -225,7 +268,6 @@
         outline-offset:-2px;
       }
 
-      /* Label + Value Layout */
       .mRow{
         display:grid;
         grid-template-columns: 110px 1fr;
@@ -247,7 +289,6 @@
         letter-spacing:.6px;
       }
 
-      /* City chip a bit smaller */
       .chip{font-size:11px;padding:5px 9px}
     }
   </style>
@@ -277,8 +318,12 @@
       </div>
 
       <div class="tile">
+        <!-- Floating Smiley sits here -->
+        <div class="floatSmiley" aria-hidden="true">🙂</div>
+
         <div class="k">Datum & Zeit</div>
         <div class="v big" id="liveWhen">—</div>
+
         <div style="margin-top:10px">
           <div class="k" id="countdownLabel">Start in</div>
           <div class="v big" id="liveCountdown">—</div>
@@ -361,7 +406,6 @@
     { city:"Bülach", court:"Court 1", start:"2026-10-08T19:00:00", code:"3112#" },
   ];
 
-  // Helpers
   const pad2 = n => String(n).padStart(2,"0");
   const parseLocal = iso => new Date(iso);
 
@@ -392,7 +436,6 @@
     .map(g => ({...g, startDate: parseLocal(g.start)}))
     .sort((a,b) => a.startDate - b.startDate);
 
-  // DOM
   const liveWhere = document.getElementById("liveWhere");
   const liveWhen = document.getElementById("liveWhen");
   const liveCountdown = document.getElementById("liveCountdown");
@@ -442,7 +485,6 @@
               : `<span class="muted">—</span>`}</td>
         `;
       } else {
-        // Mobile Cards (kein sideways scroll)
         tr.innerHTML = `
           <td>
             <div class="mRow">
@@ -501,7 +543,7 @@
 
   tick();
   setInterval(tick, 1000);
-  window.addEventListener("resize", () => tick()); // damit der Layout-Wechsel sauber ist
+  window.addEventListener("resize", () => tick());
 </script>
 
 </body>
