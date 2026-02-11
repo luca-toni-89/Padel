@@ -35,13 +35,14 @@
       display:flex;align-items:center;gap:12px;
       margin-bottom:14px;
     }
-    /* ORIGINAL tennisball logo (wie zuvor) */
+    /* Tennisball Logo */
     .logoBall{
       width:44px;height:44px;border-radius:999px;
       background: radial-gradient(circle at 30% 28%, #fff, var(--ball) 45%, #b6e400 80%);
       box-shadow: 0 10px 18px var(--ballShadow);
       position:relative;
       border:1px solid rgba(0,0,0,.06);
+      flex:0 0 auto;
     }
     .logoBall:before,.logoBall:after{
       content:"";
@@ -65,7 +66,7 @@
       overflow:hidden;
     }
 
-    /* LIVE CARD */
+    /* LIVE */
     .live{
       position:relative;
       padding:18px;
@@ -93,26 +94,12 @@
     }
     .liveTop{position:relative}
     .liveTitle{
-      display:flex;align-items:center;gap:10px;
       font-weight:950;
-      font-size:17px; /* leicht kleiner */
+      font-size:17px;
       margin:0;
-    }
-    .miniBall{
-      width:18px;height:18px;border-radius:999px;
-      background: radial-gradient(circle at 30% 28%, #fff, var(--ball) 45%, #b6e400 80%);
-      box-shadow: 0 6px 10px rgba(0,0,0,.12);
-      position:relative;
-      border:1px solid rgba(0,0,0,.06);
-    }
-    .miniBall:before,.miniBall:after{
-      content:"";position:absolute;inset:3px;border-radius:999px;border:1.6px solid rgba(0,0,0,.16);
-      clip-path: polygon(0 0, 100% 0, 100% 44%, 0 44%);
-      transform: rotate(-18deg);
-    }
-    .miniBall:after{
-      clip-path: polygon(0 56%, 100% 56%, 100% 100%, 0 100%);
-      transform: rotate(-18deg);
+      display:flex;
+      align-items:center;
+      gap:10px;
     }
     .liveHint{
       margin-top:6px;
@@ -137,17 +124,17 @@
       padding:12px 12px;
     }
     .k{color:var(--muted);font-size:11px;margin-bottom:6px}
-    .v{font-size:18px;font-weight:950;letter-spacing:.2px}   /* leicht kleiner */
-    .big{font-size:20px}                                     /* leicht kleiner */
+    .v{font-size:18px;font-weight:950;letter-spacing:.2px}
+    .big{font-size:20px}
 
     .code{
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       font-weight:950;
       letter-spacing:.8px;
-      font-size:20px; /* leicht kleiner */
+      font-size:22px;
     }
 
-    /* TABLE */
+    /* TABLE / LIST */
     .tableHead{
       padding:14px 16px 6px 16px;
       display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap;
@@ -157,6 +144,9 @@
       padding:0 16px 10px 16px;
       font-size:12px;color:var(--muted);
     }
+
+    .scroll{max-height:520px;overflow:auto}
+
     table{
       width:100%;
       border-collapse:separate;
@@ -173,21 +163,23 @@
       background: rgba(31,138,91,.06);
       position:sticky;
       top:0;
+      z-index:1;
     }
     tbody td{
       padding:11px 12px;
       border-bottom:1px solid rgba(0,0,0,.06);
       font-size:13px;
+      vertical-align:middle;
     }
     tbody tr:hover{background: rgba(47,191,113,.06)}
-    /* Highlight bleibt (wie von dir gewünscht) */
     tbody tr.highlight{
       background: rgba(216,255,63,.25);
       outline:2px solid rgba(31,138,91,.35);
       outline-offset:-2px;
     }
+
     .chip{
-      display:inline-flex;align-items:center;gap:8px;
+      display:inline-flex;align-items:center;
       padding:6px 10px;border-radius:999px;
       border:1px solid rgba(0,0,0,.08);
       font-weight:950;font-size:12px;
@@ -198,9 +190,69 @@
     .chip.buelach{background: rgba(233,165,106,.18); color:#7a3f10;}
     .nowrap{white-space:nowrap}
     .muted{color:var(--muted)}
-    .scroll{max-height:520px;overflow:auto}
+
+    /* ---------- MOBILE: Table -> Cards (kein sideways scroll) ---------- */
+    @media (max-width: 520px){
+      body{padding:16px}
+      h1{font-size:20px}
+
+      .v{font-size:19px}
+      .big{font-size:21px}
+      .code{font-size:20px}
+
+      .scroll{max-height:none; overflow:visible;} /* volle Seite, normal nach unten scroll */
+      table, thead, tbody, th, td, tr{display:block;}
+      thead{display:none;} /* header weg */
+      table{border-top:none;}
+      tbody td{
+        border:none;
+        padding:0;
+      }
+
+      /* Jede Zeile als Card */
+      tbody tr{
+        margin:10px 12px 12px 12px;
+        border:1px solid rgba(0,0,0,.10);
+        border-radius:16px;
+        padding:12px;
+        background:#fff;
+        box-shadow: 0 8px 18px rgba(0,0,0,.06);
+      }
+      tbody tr:hover{background:#fff}
+      tbody tr.highlight{
+        background: rgba(216,255,63,.22);
+        outline:2px solid rgba(31,138,91,.30);
+        outline-offset:-2px;
+      }
+
+      /* Label + Value Layout */
+      .mRow{
+        display:grid;
+        grid-template-columns: 110px 1fr;
+        gap:8px 10px;
+        align-items:center;
+      }
+      .mLabel{
+        color:var(--muted);
+        font-size:11px;
+        font-weight:700;
+      }
+      .mValue{
+        font-size:13px;
+        font-weight:800;
+      }
+      .mCode{
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+        font-weight:950;
+        letter-spacing:.6px;
+      }
+
+      /* City chip a bit smaller */
+      .chip{font-size:11px;padding:5px 9px}
+    }
   </style>
 </head>
+
 <body>
 <div class="wrap">
 
@@ -214,7 +266,7 @@
     <div class="courtLines" aria-hidden="true"></div>
 
     <div class="liveTop">
-      <div class="liveTitle"> Nächstes Spiel</div>
+      <div class="liveTitle">Nächstes Spiel</div>
       <div class="liveHint">Wechselt nach 21:00 am Spieltag automatisch zum nächsten Datum.</div>
     </div>
 
@@ -240,7 +292,7 @@
     </div>
   </div>
 
-  <!-- TABLE -->
+  <!-- LIST -->
   <div class="card">
     <div class="tableHead">
       <div class="tableTitle">Bevorstehende Spiele</div>
@@ -331,7 +383,6 @@
   }
 
   function displayUntil(startDate){
-    // am Spieltag bis 21:00 aktiv
     const d = new Date(startDate.getTime());
     d.setHours(21,0,0,0);
     return d;
@@ -350,14 +401,17 @@
   const tbody = document.getElementById("tbody");
 
   function findActive(now){
-    // Erstes Spiel, das noch nicht bis 21:00 "abgelaufen" ist
     for (const g of sorted){
       if (now < displayUntil(g.startDate)) return g;
     }
     return null;
   }
 
-  function renderUpcomingTable(now, highlightKey){
+  function isMobileCards(){
+    return window.matchMedia && window.matchMedia("(max-width: 520px)").matches;
+  }
+
+  function renderUpcoming(now, highlightKey){
     tbody.innerHTML = "";
     const upcoming = sorted.filter(g => now < displayUntil(g.startDate));
 
@@ -368,21 +422,46 @@
       return;
     }
 
+    const cards = isMobileCards();
+
     for (const g of upcoming){
       const tr = document.createElement("tr");
       const key = `${g.city}|${g.start}`;
       if (highlightKey && key === highlightKey) tr.classList.add("highlight");
 
       const chipClass = g.city === "Bülach" ? "buelach" : "";
+      const code = (g.city === "Bülach") ? (g.code || "TBD") : "—";
 
-      tr.innerHTML = `
-        <td><span class="chip ${chipClass}">${g.city}</span></td>
-        <td class="nowrap">${g.court}</td>
-        <td class="nowrap">${formatCHDateTime(g.startDate)}</td>
-        <td class="nowrap">${g.city === "Bülach"
-            ? (g.code ? `<span class="code" style="font-size:14px">${g.code}</span>` : `<span class="muted">TBD</span>`)
-            : `<span class="muted">—</span>`}</td>
-      `;
+      if (!cards){
+        tr.innerHTML = `
+          <td><span class="chip ${chipClass}">${g.city}</span></td>
+          <td class="nowrap">${g.court}</td>
+          <td class="nowrap">${formatCHDateTime(g.startDate)}</td>
+          <td class="nowrap">${g.city === "Bülach"
+              ? (g.code ? `<span class="code" style="font-size:14px">${g.code}</span>` : `<span class="muted">TBD</span>`)
+              : `<span class="muted">—</span>`}</td>
+        `;
+      } else {
+        // Mobile Cards (kein sideways scroll)
+        tr.innerHTML = `
+          <td>
+            <div class="mRow">
+              <div class="mLabel">Ort</div>
+              <div class="mValue"><span class="chip ${chipClass}">${g.city}</span></div>
+
+              <div class="mLabel">Court</div>
+              <div class="mValue">${g.court}</div>
+
+              <div class="mLabel">Datum</div>
+              <div class="mValue">${formatCHDateTime(g.startDate)}</div>
+
+              <div class="mLabel">Zugangscode</div>
+              <div class="mValue mCode">${code}</div>
+            </div>
+          </td>
+        `;
+      }
+
       tbody.appendChild(tr);
     }
   }
@@ -396,7 +475,7 @@
       liveWhen.textContent = "—";
       liveCountdown.textContent = "—";
       liveCode.textContent = "—";
-      renderUpcomingTable(now, null);
+      renderUpcoming(now, null);
       return;
     }
 
@@ -407,7 +486,6 @@
 
     liveWhere.textContent = `${g.city} · ${g.court}`;
     liveWhen.textContent = formatCHDateTime(start);
-
     liveCode.textContent = (g.city === "Bülach") ? (g.code || "TBD") : "—";
 
     if (isBefore){
@@ -418,11 +496,12 @@
       liveCountdown.textContent = countdownString(until - now);
     }
 
-    renderUpcomingTable(now, `${g.city}|${g.start}`);
+    renderUpcoming(now, `${g.city}|${g.start}`);
   }
 
   tick();
   setInterval(tick, 1000);
+  window.addEventListener("resize", () => tick()); // damit der Layout-Wechsel sauber ist
 </script>
 
 </body>
