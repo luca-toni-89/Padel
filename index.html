@@ -964,12 +964,17 @@
     return (inA&&r.outcome==='A')||(inB&&r.outcome==='B') ? 'W' : 'L';
   }
   function stats(pid){
-    let s={m:0,w:0,l:0,d:0,sw:0,sl:0,gw:0,gl:0,currentStreak:0,longestStreak:0,form:[]};
+    let s={m:0,w:0,l:0,d:0,sw:0,sl:0,gw:0,gl:0,currentStreak:0,longestStreak:0,form:[],locations:{buelach:0,milandia:0,duebendorf:0}};
     const playerMatches=results.filter(r=>playerOutcome(r,pid)).sort((a,b)=>new Date(a.playedAt)-new Date(b.playedAt));
     let running=0;
     playerMatches.forEach(r=>{
       const a=r.teamA.includes(pid), outcome=playerOutcome(r,pid);
       s.m++;
+      const linkedGame=games.find(g=>gameId(g)===r.gameId);
+      const city=(linkedGame?.city||'').trim().toLowerCase();
+      if(city==='bülach'||city==='buelach')s.locations.buelach++;
+      else if(city==='milandia')s.locations.milandia++;
+      else if(city==='dübendorf'||city==='duebendorf')s.locations.duebendorf++;
       if(outcome==='W'){s.w++;running++;s.longestStreak=Math.max(s.longestStreak,running)}
       else {outcome==='D'?s.d++:s.l++;running=0}
       r.sets.forEach(set=>{
@@ -997,7 +1002,7 @@
     const history=playerHistory(pid);
     const formDots=s.form.length?s.form.map(x=>`<span class="pdFormDot ${x.toLowerCase()}" title="${x==='W'?'Sieg':x==='L'?'Niederlage':'Unentschieden'}"></span>`).join(''):'<span class="muted">Noch keine Spiele</span>';
     const historyHtml=history.length?history.map(r=>{const o=playerOutcome(r,pid);return `<div class="pdHistoryItem"><div class="muted">${new Intl.DateTimeFormat('de-CH',{dateStyle:'medium'}).format(new Date(r.playedAt))}</div><div class="pdHistoryTeams"><b>${names(r.teamA)}</b><br><span class="muted">gegen</span><br><b>${names(r.teamB)}</b></div><div style="text-align:right"><div class="pdHistoryScore">${r.sets.map(s=>`${s.a}:${s.b}`).join(' · ')}</div><span class="pdResultBadge ${o.toLowerCase()}">${o==='W'?'Sieg':o==='L'?'Niederlage':'Unentschieden'}</span></div></div>`}).join(''):'<div class="pdEmpty">Noch keine Resultate vorhanden.</div>';
-    $('#pdPlayerProfile').innerHTML=`<button class="pdBack" id="pdBack">← Zur Rangliste</button><div class="pdProfileHero"><div>${avatar(p,'pdProfileAvatar')}<label class="pdUpload">Profilbild hochladen<input id="pdAvatarUpload" type="file" accept="image/*"></label></div><div><h2 style="margin:0 0 5px">${p.name}</h2><div class="muted">Persönliche Statistiken</div><div class="pdFormDots">${formDots}</div></div></div><div class="pdStats"><div class="pdStat"><b>${s.m}</b><span>Matches</span></div><div class="pdStat"><b>${s.w}</b><span>Siege</span></div><div class="pdStat"><b>${s.l}</b><span>Niederlagen</span></div><div class="pdStat"><b>${s.d}</b><span>Unentschieden</span></div><div class="pdStat"><b>${s.rate}%</b><span>Win Rate</span></div><div class="pdStat"><b>${s.sw}:${s.sl}</b><span>Sätze</span></div><div class="pdStat"><b>${s.gw}:${s.gl}</b><span>Games</span></div><div class="pdStat"><b>${s.gw-s.gl}</b><span>Game-Differenz</span></div><div class="pdStat"><b>🔥 ${s.currentStreak}</b><span>Aktuelle Siegesserie</span></div><div class="pdStat"><b>🏆 ${s.longestStreak}</b><span>Längste Siegesserie</span></div></div><div class="pdHistory"><div class="pdSectionTitle">Match-Historie</div>${historyHtml}</div>`;
+    $('#pdPlayerProfile').innerHTML=`<button class="pdBack" id="pdBack">← Zur Rangliste</button><div class="pdProfileHero"><div>${avatar(p,'pdProfileAvatar')}<label class="pdUpload">Profilbild hochladen<input id="pdAvatarUpload" type="file" accept="image/*"></label></div><div><h2 style="margin:0 0 5px">${p.name}</h2><div class="muted">Persönliche Statistiken</div><div class="pdFormDots">${formDots}</div></div></div><div class="pdStats"><div class="pdStat"><b>${s.m}</b><span>Matches</span></div><div class="pdStat"><b>${s.w}</b><span>Siege</span></div><div class="pdStat"><b>${s.l}</b><span>Niederlagen</span></div><div class="pdStat"><b>${s.d}</b><span>Unentschieden</span></div><div class="pdStat"><b>${s.rate}%</b><span>Win Rate</span></div><div class="pdStat"><b>${s.sw}:${s.sl}</b><span>Sätze</span></div><div class="pdStat"><b>${s.gw}:${s.gl}</b><span>Games</span></div><div class="pdStat"><b>${s.gw-s.gl}</b><span>Game-Differenz</span></div><div class="pdStat"><b>🔥 ${s.currentStreak}</b><span>Aktuelle Siegesserie</span></div><div class="pdStat"><b>🏆 ${s.longestStreak}</b><span>Längste Siegesserie</span></div><div class="pdStat"><b>${s.locations.buelach}</b><span>Matches in Bülach</span></div><div class="pdStat"><b>${s.locations.milandia}</b><span>Matches in Milandia</span></div><div class="pdStat"><b>${s.locations.duebendorf}</b><span>Matches in Dübendorf</span></div></div><div class="pdHistory"><div class="pdSectionTitle">Match-Historie</div>${historyHtml}</div>`;
     $('#pdBack').onclick=()=>{$('#pdPlayerProfile').style.display='none';$('#pdAnalyticsHome').style.display='block'};
     $('#pdAvatarUpload').onchange=e=>uploadAvatar(pid,e.target.files[0]);
   }
