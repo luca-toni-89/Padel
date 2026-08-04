@@ -332,6 +332,31 @@
     @media (prefers-reduced-motion: reduce){
       #ballLayer{ display:none; }
     }
+
+
+  /* ---------- Private result & analytics menu (additive only) ---------- */
+  .pdPrivateBtn{
+    margin-left:auto;width:36px;height:36px;border:0;border-radius:999px;
+    background:transparent;color:rgba(26,26,26,.28);font-size:22px;line-height:1;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;
+    transition:.18s ease;position:relative;z-index:60;
+  }
+  .pdPrivateBtn:hover,.pdPrivateBtn:focus-visible{background:rgba(255,255,255,.78);color:var(--ink);box-shadow:0 8px 20px rgba(0,0,0,.09);outline:none}
+  .pdQuickMenu{position:fixed;right:22px;top:70px;z-index:120;width:230px;padding:8px;background:rgba(255,255,255,.96);border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 45px rgba(0,0,0,.18);display:none;backdrop-filter:blur(12px)}
+  .pdQuickMenu.open{display:block}
+  .pdQuickMenu button{width:100%;border:0;background:transparent;text-align:left;padding:11px 12px;border-radius:11px;font-weight:850;cursor:pointer;color:var(--ink)}
+  .pdQuickMenu button:hover{background:rgba(31,138,91,.09)}
+  .pdOverlay{position:fixed;inset:0;z-index:110;background:rgba(15,25,18,.54);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:16px}
+  .pdOverlay.open{display:flex}
+  .pdModal{width:min(880px,100%);max-height:92vh;overflow:auto;background:#fbfcfa;border-radius:22px;box-shadow:0 28px 90px rgba(0,0,0,.34);border:1px solid rgba(255,255,255,.65)}
+  .pdModalHead{position:sticky;top:0;z-index:2;padding:17px 19px;display:flex;justify-content:space-between;align-items:center;background:rgba(251,252,250,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .pdModalTitle{font-size:18px;font-weight:950}.pdClose{width:36px;height:36px;border:0;border-radius:50%;background:#edf0ec;font-size:20px;cursor:pointer}.pdBody{padding:19px}
+  .pdSection{margin-bottom:20px}.pdSectionTitle{font-weight:950;margin-bottom:10px}.pdField{display:grid;gap:6px}.pdField label{font-size:11px;color:var(--muted);font-weight:800}.pdField select,.pdField input{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;font:inherit}
+  .pdTeams{display:grid;grid-template-columns:1fr 42px 1fr;gap:10px;align-items:center}.pdTeam{padding:13px;border:1px solid var(--line);border-radius:15px;background:#fff}.pdTeam h4{margin:0 0 9px}.pdVs{text-align:center;color:var(--muted);font-weight:950}
+  .pdSets{display:grid;gap:9px}.pdSetRow{display:grid;grid-template-columns:76px 1fr 24px 1fr 92px;gap:8px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:14px;background:#fff}.pdScore{text-align:center;font-size:21px!important;font-weight:950}.pdSetState{font-size:11px;font-weight:850}.pdDone{color:#145a3b}.pdOpen{color:#986514}
+  .pdPreview{padding:14px;border-radius:15px;background:linear-gradient(135deg,rgba(31,138,91,.10),rgba(216,255,63,.25));font-weight:900}.pdSave{width:100%;border:0;border-radius:14px;padding:14px;background:var(--padelGreen);color:#fff;font-weight:950;cursor:pointer}.pdHint{font-size:11px;color:var(--muted);margin-top:7px}
+  .pdLeader{display:grid;grid-template-columns:36px 1fr repeat(4,72px);gap:8px;align-items:center;padding:12px 6px;border-top:1px solid var(--line);cursor:pointer}.pdLeader:first-child{border-top:0}.pdLeader:hover{background:rgba(31,138,91,.05)}.pdMetric{text-align:center}.pdMetric b{display:block}.pdMetric small{color:var(--muted);font-size:10px}.pdAvatar{width:42px;height:42px;border-radius:50%;object-fit:cover;background:linear-gradient(135deg,#d9f7df,#f7e1cc);display:grid;place-items:center;font-weight:950;color:#145a3b;overflow:hidden;flex:0 0 auto}.pdAvatar img{width:100%;height:100%;object-fit:cover}.pdProfileHero{display:flex;gap:17px;align-items:center;margin-bottom:18px}.pdProfileAvatar{width:88px;height:88px;border-radius:50%;overflow:hidden;background:linear-gradient(135deg,#d9f7df,#f7e1cc);display:grid;place-items:center;font-size:27px;font-weight:950}.pdProfileAvatar img{width:100%;height:100%;object-fit:cover}.pdUpload{display:inline-block;margin-top:8px;padding:8px 10px;border-radius:10px;background:#edf1ed;font-size:11px;font-weight:850;cursor:pointer}.pdUpload input{display:none}.pdStats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.pdStat{padding:13px;border:1px solid var(--line);border-radius:14px;background:#fff}.pdStat b{font-size:20px;display:block}.pdStat span{font-size:11px;color:var(--muted)}.pdBack{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 11px;font-weight:850;cursor:pointer;margin-bottom:16px}.pdEmpty{padding:24px;text-align:center;color:var(--muted)}
+  @media(max-width:650px){.pdQuickMenu{right:14px;top:62px}.pdTeams{grid-template-columns:1fr}.pdVs{padding:0}.pdSetRow{grid-template-columns:64px 1fr 20px 1fr}.pdSetState{grid-column:1/-1}.pdLeader{grid-template-columns:32px 1fr 56px 56px}.pdHideM{display:none}.pdStats{grid-template-columns:repeat(2,1fr)}}
   </style>
 </head>
 
@@ -344,6 +369,7 @@
     <div class="header">
       <div class="logoBall">🎾</div>
       <h1>Padel Dashboard</h1>
+      <button class="pdPrivateBtn" id="pdPrivateBtn" aria-label="Privates Menü" title="Menü">•••</button>
     </div>
 
     <!-- LIVE -->
@@ -402,6 +428,36 @@
       </div>
     </div>
 
+  </div>
+
+
+  <div class="pdQuickMenu" id="pdQuickMenu" aria-hidden="true">
+    <button type="button" id="pdOpenResult">✍️&nbsp;&nbsp;Spielresultat erfassen</button>
+    <button type="button" id="pdOpenAnalytics">📊&nbsp;&nbsp;Analytics</button>
+  </div>
+
+  <div class="pdOverlay" id="pdResultModal">
+    <div class="pdModal">
+      <div class="pdModalHead"><div class="pdModalTitle">Spielresultat erfassen</div><button class="pdClose" data-pd-close="pdResultModal">×</button></div>
+      <div class="pdBody">
+        <div class="pdSection"><div class="pdSectionTitle">Spiel auswählen</div><div class="pdField"><label>Vergangenes Spiel – maximal 5 Tage</label><select id="pdGameSelect"></select></div></div>
+        <div class="pdSection"><div class="pdSectionTitle">Teams</div><div class="pdTeams">
+          <div class="pdTeam"><h4>Team A</h4><div class="pdField"><label>Spieler 1</label><select id="pdA1"></select></div><div class="pdField" style="margin-top:8px"><label>Spieler 2</label><select id="pdA2"></select></div></div>
+          <div class="pdVs">VS</div>
+          <div class="pdTeam"><h4>Team B</h4><div class="pdField"><label>Spieler 1</label><select id="pdB1"></select></div><div class="pdField" style="margin-top:8px"><label>Spieler 2</label><select id="pdB2"></select></div></div>
+        </div></div>
+        <div class="pdSection"><div class="pdSectionTitle">Alle drei Sätze</div><div class="pdSets" id="pdSets"></div><div class="pdHint">Ihr tragt immer drei Sätze ein. Satz 3 darf unfertig sein. Nur vollständig gewonnene Sätze zählen für den Matchausgang.</div></div>
+        <div class="pdPreview" id="pdPreview">Noch kein Resultat.</div>
+        <button class="pdSave" id="pdSaveResult" style="margin-top:12px">Resultat speichern</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pdOverlay" id="pdAnalyticsModal">
+    <div class="pdModal">
+      <div class="pdModalHead"><div class="pdModalTitle">Analytics</div><button class="pdClose" data-pd-close="pdAnalyticsModal">×</button></div>
+      <div class="pdBody"><div id="pdAnalyticsHome"></div><div id="pdPlayerProfile" style="display:none"></div></div>
+    </div>
   </div>
 
 <script>
@@ -738,6 +794,37 @@
     setInterval(spawnBall, SPAWN_EVERY_MS);
     requestAnimationFrame(step);
   })();
+</script>
+
+<script>
+(() => {
+  const PLAYERS=[{id:'luca-c',name:'Luca C.'},{id:'luca-a',name:'Luca A.'},{id:'wara',name:'Wara'},{id:'antonio',name:'Antonio'}];
+  const RESULT_KEY='padel_results_v2', AVATAR_KEY='padel_avatars_v2';
+  let results=JSON.parse(localStorage.getItem(RESULT_KEY)||'[]');
+  let avatars=JSON.parse(localStorage.getItem(AVATAR_KEY)||'{}');
+  const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+  const menu=$('#pdQuickMenu');
+  $('#pdPrivateBtn').onclick=e=>{e.stopPropagation();menu.classList.toggle('open')};
+  document.addEventListener('click',e=>{if(!menu.contains(e.target)&&e.target!==$('#pdPrivateBtn'))menu.classList.remove('open')});
+  const open=id=>{$('#'+id).classList.add('open');menu.classList.remove('open')};
+  const close=id=>$('#'+id).classList.remove('open');
+  $$('[data-pd-close]').forEach(b=>b.onclick=()=>close(b.dataset.pdClose));
+  $$('.pdOverlay').forEach(o=>o.onclick=e=>{if(e.target===o)close(o.id)});
+  const gameId=g=>`${g.city}|${g.court}|${g.start}`;
+  const fmt=d=>new Intl.DateTimeFormat('de-CH',{dateStyle:'medium',timeStyle:'short'}).format(d);
+  function eligibleGames(){const now=new Date(),min=new Date(now.getTime()-5*86400000);return games.filter(g=>{const d=new Date(g.start);return d<=now&&d>=min&&!results.some(r=>r.gameId===gameId(g))}).sort((a,b)=>new Date(b.start)-new Date(a.start))}
+  function playerOptions(){return '<option value="">Auswählen…</option>'+PLAYERS.map(p=>`<option value="${p.id}">${p.name}</option>`).join('')}
+  function validSet(a,b){if(a===6&&b<=4)return true;if(b===6&&a<=4)return true;if(a===7&&(b===5||b===6))return true;if(b===7&&(a===5||a===6))return true;return false}
+  function evaluate(){const sets=[1,2,3].map(i=>({a:+$('#pdS'+i+'A').value,b:+$('#pdS'+i+'B').value}));let aw=0,bw=0;sets.forEach(s=>{if(validSet(s.a,s.b)){if(s.a>s.b)aw++;else bw++}});let text='Unentschieden';if(aw>=2)text='Sieg Team A';else if(bw>=2)text='Sieg Team B';$('#pdPreview').textContent=`Zwischenstand nach beendeten Sätzen: ${aw}:${bw} · ${text}`;sets.forEach((s,i)=>{const el=$('#pdState'+(i+1));const done=validSet(s.a,s.b);el.textContent=done?'Satz beendet':'offen / unfertig';el.className='pdSetState '+(done?'pdDone':'pdOpen')});return {sets,aw,bw,outcome:aw>=2?'A':bw>=2?'B':'D'}}
+  function openResult(){const list=eligibleGames();$('#pdGameSelect').innerHTML=list.length?list.map(g=>`<option value="${gameId(g)}">${fmt(new Date(g.start))} · ${g.city} · ${g.court}</option>`).join(''):'<option value="">Kein erfassbares Spiel vorhanden</option>';['pdA1','pdA2','pdB1','pdB2'].forEach(id=>$('#'+id).innerHTML=playerOptions());$('#pdA1').value='luca-c';$('#pdA2').value='luca-a';$('#pdB1').value='wara';$('#pdB2').value='antonio';$('#pdSets').innerHTML=[1,2,3].map(i=>`<div class="pdSetRow"><b>Satz ${i}</b><input class="pdScore" id="pdS${i}A" type="number" min="0" max="7" value="0"><span>:</span><input class="pdScore" id="pdS${i}B" type="number" min="0" max="7" value="0"><span class="pdSetState pdOpen" id="pdState${i}">offen / unfertig</span></div>`).join('');$$('.pdScore').forEach(x=>x.oninput=()=>{x.value=Math.max(0,Math.min(7,+x.value||0));evaluate()});evaluate();open('pdResultModal')}
+  $('#pdSaveResult').onclick=()=>{const ids=['pdA1','pdA2','pdB1','pdB2'].map(id=>$('#'+id).value);if(!$('#pdGameSelect').value)return alert('Aktuell gibt es kein Spiel, das innerhalb der letzten fünf Tage erfasst werden kann.');if(ids.some(x=>!x)||new Set(ids).size!==4)return alert('Bitte jeden Spieler genau einmal auswählen.');const ev=evaluate();if(!validSet(ev.sets[0].a,ev.sets[0].b)||!validSet(ev.sets[1].a,ev.sets[1].b))return alert('Satz 1 und Satz 2 müssen vollständig beendet sein. Satz 3 darf unfertig bleiben.');results.push({id:crypto.randomUUID?crypto.randomUUID():Date.now().toString(),gameId:$('#pdGameSelect').value,teamA:ids.slice(0,2),teamB:ids.slice(2),sets:ev.sets,outcome:ev.outcome,createdAt:new Date().toISOString()});localStorage.setItem(RESULT_KEY,JSON.stringify(results));close('pdResultModal');alert('Resultat gespeichert.')};
+  function stats(pid){let s={m:0,w:0,l:0,d:0,sw:0,sl:0,gw:0,gl:0};results.forEach(r=>{const a=r.teamA.includes(pid),b=r.teamB.includes(pid);if(!a&&!b)return;s.m++;if(r.outcome==='D')s.d++;else if((a&&r.outcome==='A')||(b&&r.outcome==='B'))s.w++;else s.l++;r.sets.forEach(set=>{if(a){s.gw+=set.a;s.gl+=set.b;if(validSet(set.a,set.b)){set.a>set.b?s.sw++:s.sl++}}else{s.gw+=set.b;s.gl+=set.a;if(validSet(set.a,set.b)){set.b>set.a?s.sw++:s.sl++}}})});s.rate=s.m?Math.round(s.w/s.m*100):0;return s}
+  function avatar(p,cls='pdAvatar'){return `<div class="${cls}">${avatars[p.id]?`<img src="${avatars[p.id]}" alt="">`:p.name.split(' ').map(x=>x[0]).join('')}</div>`}
+  function renderAnalytics(){const rows=PLAYERS.map(p=>({p,s:stats(p.id)})).sort((a,b)=>b.s.w-a.s.w||b.s.rate-a.s.rate);$('#pdAnalyticsHome').innerHTML=`<div class="card" style="box-shadow:none"><div class="tableHead"><div class="tableTitle">Spieler-Rangliste</div></div><div style="padding:0 12px 12px">${rows.map(({p,s},i)=>`<div class="pdLeader" data-pid="${p.id}"><b style="text-align:center">${i+1}</b><div style="display:flex;align-items:center;gap:9px">${avatar(p)}<b>${p.name}</b></div><div class="pdMetric"><b>${s.m}</b><small>Matches</small></div><div class="pdMetric"><b>${s.w}</b><small>Siege</small></div><div class="pdMetric pdHideM"><b>${s.d}</b><small>Unentsch.</small></div><div class="pdMetric pdHideM"><b>${s.rate}%</b><small>Win Rate</small></div></div>`).join('')}</div></div>`;$$('[data-pid]').forEach(x=>x.onclick=()=>openProfile(x.dataset.pid))}
+  function openProfile(pid){const p=PLAYERS.find(x=>x.id===pid),s=stats(pid);$('#pdAnalyticsHome').style.display='none';$('#pdPlayerProfile').style.display='block';$('#pdPlayerProfile').innerHTML=`<button class="pdBack" id="pdBack">← Zur Rangliste</button><div class="pdProfileHero"><div>${avatar(p,'pdProfileAvatar')}<label class="pdUpload">Profilbild hochladen<input id="pdAvatarUpload" type="file" accept="image/*"></label></div><div><h2 style="margin:0 0 5px">${p.name}</h2><div class="muted">Persönliche Statistiken</div></div></div><div class="pdStats"><div class="pdStat"><b>${s.m}</b><span>Matches</span></div><div class="pdStat"><b>${s.w}</b><span>Siege</span></div><div class="pdStat"><b>${s.l}</b><span>Niederlagen</span></div><div class="pdStat"><b>${s.d}</b><span>Unentschieden</span></div><div class="pdStat"><b>${s.rate}%</b><span>Win Rate</span></div><div class="pdStat"><b>${s.sw}:${s.sl}</b><span>Sätze</span></div><div class="pdStat"><b>${s.gw}:${s.gl}</b><span>Games</span></div><div class="pdStat"><b>${s.gw-s.gl}</b><span>Game-Differenz</span></div></div>`;$('#pdBack').onclick=()=>{$('#pdPlayerProfile').style.display='none';$('#pdAnalyticsHome').style.display='block'};$('#pdAvatarUpload').onchange=e=>{const f=e.target.files[0];if(!f)return;if(f.size>2*1024*1024)return alert('Bitte maximal 2 MB.');const reader=new FileReader();reader.onload=()=>{avatars[pid]=reader.result;localStorage.setItem(AVATAR_KEY,JSON.stringify(avatars));openProfile(pid)};reader.readAsDataURL(f)}}
+  $('#pdOpenResult').onclick=openResult;
+  $('#pdOpenAnalytics').onclick=()=>{$('#pdPlayerProfile').style.display='none';$('#pdAnalyticsHome').style.display='block';renderAnalytics();open('pdAnalyticsModal')};
+})();
 </script>
 
 </body>
