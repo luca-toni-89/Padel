@@ -475,64 +475,44 @@
   </div>
 
 <script>
-  // Daten: ISO lokal (ohne Z)
-  const games = [
-    // Milandia (Court 3)
-    { city:"Milandia", court:"Court 3", start:"2025-12-18T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2026-01-08T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2026-01-22T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2026-02-05T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2026-02-19T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2026-03-05T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2026-03-19T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2026-04-02T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2026-04-16T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2026-04-30T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2026-05-14T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2026-05-28T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2026-06-11T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2026-06-25T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2026-07-09T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2026-07-23T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2026-08-06T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2026-08-20T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2026-09-03T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2026-09-17T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2026-10-01T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2026-10-15T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2026-10-29T19:00:00", code:"" },
-    { city:"Dübendorf", court:"Padel 3", start:"2026-11-12T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2026-11-26T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2026-12-10T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2026-12-24T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2027-01-07T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2027-01-21T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2027-02-04T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2027-02-18T19:00:00", code:"" },
-    { city:"Milandia", court:"Court 3", start:"2027-03-04T19:00:00", code:"" },
-    
+  // Termine werden vollständig aus Supabase geladen.
+  const SUPABASE_URL_DASHBOARD = 'https://gxcpzbhgtolruadhrzuw.supabase.co';
+  const SUPABASE_PUBLISHABLE_KEY_DASHBOARD = 'sb_publishable_ptG0SU2cxogc5VQstJWV_Q__MX-W8KH';
+  const dashboardSb = window.supabase.createClient(
+    SUPABASE_URL_DASHBOARD,
+    SUPABASE_PUBLISHABLE_KEY_DASHBOARD
+  );
 
-    // Bülach (Court 1) + Zugangscode
-    { city:"Bülach", court:"Court 1", start:"2026-02-12T19:00:00", code:"8411#" },
-    { city:"Bülach", court:"Court 1", start:"2026-02-26T19:00:00", code:"6868#" },
-    { city:"Bülach", court:"Court 1", start:"2026-03-12T19:00:00", code:"8143#" },
-    { city:"Bülach", court:"Court 1", start:"2026-03-26T19:00:00", code:"8126#" },
-    { city:"Bülach", court:"Court 1", start:"2026-04-09T19:00:00", code:"5726#" },
-    { city:"Bülach", court:"Court 1", start:"2026-04-23T19:00:00", code:"4125#" },
-    { city:"Bülach", court:"Court 1", start:"2026-05-07T19:00:00", code:"9478#" },
-    { city:"Bülach", court:"Court 1", start:"2026-05-21T19:00:00", code:"5758#" },
-    { city:"Bülach", court:"Court 1", start:"2026-06-04T19:00:00", code:"8265#" },
-    { city:"Bülach", court:"Court 1", start:"2026-06-18T19:00:00", code:"3703#" },
-    { city:"Bülach", court:"Court 1", start:"2026-07-02T19:00:00", code:"2012#" },
-    { city:"Bülach", court:"Court 1", start:"2026-07-15T19:00:00", code:"2878#" },
-    { city:"Bülach", court:"Court 1", start:"2026-07-30T19:00:00", code:"7170#" },
-    { city:"Bülach", court:"Court 1", start:"2026-08-13T19:00:00", code:"9432#" },
-    { city:"Bülach", court:"Court 1", start:"2026-08-26T19:00:00", code:"2750#" },
-    { city:"Bülach", court:"Court 1", start:"2026-09-09T19:00:00", code:"5646#" },
-    { city:"Bülach", court:"Court 1", start:"2026-09-23T19:00:00", code:"6603#" },
-    { city:"Bülach", court:"Court 1", start:"2026-10-07T19:00:00", code:"3112#" },
-    { city:"Bülach", court:"Court 1", start:"2026-10-21T19:00:00", code:"2276#" },
-  ];
+  let games = [];
+  let sorted = [];
+
+  function mapGameRow(row){
+    return {
+      gameKey: row.game_key,
+      city: row.city,
+      court: row.court,
+      start: row.played_at,
+      code: row.access_code || ''
+    };
+  }
+
+  function refreshSortedGames(){
+    sorted = games
+      .map(g => ({...g, startDate: parseLocal(g.start)}))
+      .filter(g => !Number.isNaN(g.startDate.getTime()))
+      .sort((a,b) => a.startDate - b.startDate);
+  }
+
+  async function loadGamesFromSupabase(){
+    const {data, error} = await dashboardSb
+      .from('padel_games')
+      .select('game_key,city,court,played_at,access_code')
+      .order('played_at', {ascending:true});
+
+    if(error) throw error;
+    games = (data || []).map(mapGameRow);
+    refreshSortedGames();
+  }
 
   // Helpers
   const pad2 = n => String(n).padStart(2,"0");
@@ -561,9 +541,6 @@
     return d;
   }
 
-  const sorted = games
-    .map(g => ({...g, startDate: parseLocal(g.start)}))
-    .sort((a,b) => a.startDate - b.startDate);
 
   // DOM
   const liveWhere = document.getElementById("liveWhere");
@@ -599,7 +576,7 @@
 
     for (const g of upcoming){
       const tr = document.createElement("tr");
-      const key = `${g.city}|${g.start}`;
+      const key = g.gameKey || `${g.city}|${g.court}|${g.start}`;
       if (highlightKey && key === highlightKey) tr.classList.add("highlight");
 
       const chipClass = g.city === "Bülach" ? "buelach" : "";
@@ -669,12 +646,26 @@
       liveCountdown.textContent = countdownString(until - now);
     }
 
-    renderUpcoming(now, `${g.city}|${g.start}`);
+    renderUpcoming(now, g.gameKey || `${g.city}|${g.court}|${g.start}`);
   }
 
-  tick();
-  setInterval(tick, 1000);
-  window.addEventListener("resize", () => tick());
+  async function initDashboard(){
+    try{
+      await loadGamesFromSupabase();
+      tick();
+      setInterval(tick, 1000);
+      window.addEventListener("resize", () => tick());
+    } catch(error){
+      console.error('Spiele konnten nicht aus Supabase geladen werden:', error);
+      liveWhere.textContent = 'Daten nicht verfügbar';
+      liveWhen.textContent = '—';
+      liveCountdown.textContent = '—';
+      liveCode.textContent = '—';
+      tbody.innerHTML = '<tr><td colspan="4" class="muted">Spiele konnten nicht aus Supabase geladen werden.</td></tr>';
+    }
+  }
+
+  initDashboard();
 
   /* ---------- Playful flying balls (weniger Bälle, Bounce in Viewport-Mitte) ---------- */
   (function initFlyingBalls(){
@@ -829,7 +820,7 @@
   const menu=$('#pdQuickMenu');
   const open=id=>{$('#'+id).classList.add('open');menu.classList.remove('open')};
   const close=id=>$('#'+id).classList.remove('open');
-  const gameId=g=>`${g.city}|${g.court}|${g.start}`;
+  const gameId=g=>g.gameKey || `${g.city}|${g.court}|${g.start}`;
   const fmt=d=>new Intl.DateTimeFormat('de-CH',{dateStyle:'medium',timeStyle:'short'}).format(d);
 
   $('#pdPrivateBtn').onclick=e=>{e.stopPropagation();menu.classList.toggle('open')};
@@ -869,12 +860,21 @@
   }
 
   async function loadData(){
-    const [{data:matchData,error:matchError},{data:profileData,error:profileError}] = await Promise.all([
+    const [
+      {data:matchData,error:matchError},
+      {data:profileData,error:profileError},
+      {data:gameData,error:gameError}
+    ] = await Promise.all([
       sb.from('padel_matches').select('*').order('played_at',{ascending:false}),
-      sb.from('padel_profiles').select('player_id,display_name,avatar_path')
+      sb.from('padel_profiles').select('player_id,display_name,avatar_path'),
+      sb.from('padel_games').select('game_key,city,court,played_at,access_code').order('played_at',{ascending:true})
     ]);
     if(matchError) throw matchError;
     if(profileError) throw profileError;
+    if(gameError) throw gameError;
+
+    games=(gameData||[]).map(mapGameRow);
+    refreshSortedGames();
     results=(matchData||[]).map(r=>({
       id:r.id, gameId:r.game_key, teamA:r.team_a, teamB:r.team_b,
       sets:r.sets, outcome:r.outcome, createdAt:r.created_at, playedAt:r.played_at
