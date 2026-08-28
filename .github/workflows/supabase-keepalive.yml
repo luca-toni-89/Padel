@@ -1,0 +1,17 @@
+name: Supabase Keep Alive
+
+on:
+  schedule:
+    - cron: "0 8 */2 * *"
+  workflow_dispatch:
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ping Supabase
+        run: |
+          curl --fail --silent --show-error \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            "https://gxcpzbhgtolruadhrzuw.supabase.co/rest/v1/padel_games?select=game_key&limit=1"
